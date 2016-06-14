@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="date" content="2016-06-14" />
+
+<title>Accessing the Wordbank database</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Accessing the Wordbank database</h1>
+<h4 class="date"><em>2016-06-14</em></h4>
+
+
+
+<p>The <code>wordbankr</code> package allows you to access data in the <a href="http://wordbank.stanford.edu/">Wordbank database</a> from R. This vignette shows some examples of how to use the data loading functions and what the resulting data look like.</p>
+<p>There are three different data views that you can pull out of Wordbank: by-administration, by-item, and administration-by-item.</p>
+<p>The <code>get_administration_data</code> function gives by-administration information, for either a specific language and form or for all instruments:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">english_ws_admins &lt;-<span class="st"> </span><span class="kw">get_administration_data</span>(<span class="st">&quot;English&quot;</span>, <span class="st">&quot;WS&quot;</span>)
+<span class="kw">head</span>(english_ws_admins)</code></pre></div>
+<pre><code>## Source: local data frame [6 x 14]
+## 
+##   data_id   age comprehension production language  form birth_order
+##     (dbl) (int)         (int)      (int)    (chr) (chr)      (fctr)
+## 1   51699    27           497        497  English    WS      Fourth
+## 2   51700    21           369        369  English    WS      Second
+## 3   51701    26           190        190  English    WS      Fourth
+## 4   51702    27           264        264  English    WS      Second
+## 5   51703    19           159        159  English    WS      Second
+## 6   51704    30           513        513  English    WS      Second
+## Variables not shown: ethnicity (fctr), sex (fctr), zygosity (chr), norming
+##   (lgl), longitudinal (lgl), source_name (chr), mom_ed (fctr)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">all_admins &lt;-<span class="st"> </span><span class="kw">get_administration_data</span>()
+<span class="kw">head</span>(all_admins)</code></pre></div>
+<pre><code>## Source: local data frame [6 x 14]
+## 
+##   data_id   age comprehension production language  form birth_order
+##     (dbl) (int)         (int)      (int)    (chr) (chr)      (fctr)
+## 1   29821    13           293         88 Croatian    WG          NA
+## 2   29822    16           122         12 Croatian    WG          NA
+## 3   29823     9             3          0 Croatian    WG          NA
+## 4   29824    12             0          0 Croatian    WG          NA
+## 5   29825    12            44          0 Croatian    WG          NA
+## 6   29826     8            14          5 Croatian    WG          NA
+## Variables not shown: ethnicity (fctr), sex (fctr), zygosity (chr), norming
+##   (lgl), longitudinal (lgl), source_name (chr), mom_ed (fctr)</code></pre>
+<p>The <code>get_item_data</code> function gives by-item information, for either a specific language and form or for all instruments:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spanish_wg_items &lt;-<span class="st"> </span><span class="kw">get_item_data</span>(<span class="st">&quot;Spanish&quot;</span>, <span class="st">&quot;WG&quot;</span>)
+<span class="kw">head</span>(spanish_wg_items)</code></pre></div>
+<pre><code>## Source: local data frame [6 x 11]
+## 
+##   item_id definition language  form  type category lexical_category
+##     (chr)      (chr)    (chr) (chr) (chr)    (chr)            (chr)
+## 1  item_1       ¡am!  Spanish    WG  word   sounds            other
+## 2  item_2       ¡ay!  Spanish    WG  word   sounds            other
+## 3  item_3    bee/mee  Spanish    WG  word   sounds            other
+## 4  item_4     cuacuá  Spanish    WG  word   sounds            other
+## 5  item_5     guaguá  Spanish    WG  word   sounds            other
+## 6  item_6       miau  Spanish    WG  word   sounds            other
+## Variables not shown: lexical_class (chr), uni_lemma (chr),
+##   complexity_category (chr), num_item_id (dbl)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">all_items &lt;-<span class="st"> </span><span class="kw">get_item_data</span>()
+<span class="kw">head</span>(all_items)</code></pre></div>
+<pre><code>## Source: local data frame [6 x 11]
+## 
+##    item_id definition language  form  type     category lexical_category
+##      (chr)      (chr)    (chr) (chr) (chr)        (chr)            (chr)
+## 1  item_81     gristi Croatian    WG  word action_words       predicates
+## 2 item_264     puhati Croatian    WG  word action_words       predicates
+## 3 item_269    razbiti Croatian    WG  word action_words       predicates
+## 4  item_64   donijeti Croatian    WG  word action_words       predicates
+## 5 item_153     kupiti Croatian    WG  word action_words       predicates
+## 6  item_36    čistiti Croatian    WG  word action_words       predicates
+## Variables not shown: lexical_class (chr), uni_lemma (chr),
+##   complexity_category (chr), num_item_id (dbl)</code></pre>
+<p>If you are only looking at total vocabulary size, <code>admins</code> is all you need, since it has both productive and receptive vocabulary sizes calculated. If you are looking at specific items or subsets of items, you need to load instrument data, using the <code>get_instrument_data</code> function. Pass it an instrument language and form, along with a list of items you want to extract (by <code>item_id</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eng_ws_canines &lt;-<span class="st"> </span><span class="kw">get_instrument_data</span>(<span class="dt">instrument_language =</span> <span class="st">&quot;English&quot;</span>,
+                                      <span class="dt">instrument_form =</span> <span class="st">&quot;WS&quot;</span>,
+                                      <span class="dt">items =</span> <span class="kw">c</span>(<span class="st">&quot;item_26&quot;</span>, <span class="st">&quot;item_46&quot;</span>))
+<span class="kw">head</span>(eng_ws_canines)</code></pre></div>
+<pre><code>## Source: local data frame [6 x 3]
+## 
+##   data_id    value num_item_id
+##     &lt;dbl&gt;    &lt;chr&gt;       &lt;dbl&gt;
+## 1   51699 produces          26
+## 2   51700 produces          26
+## 3   51701 produces          26
+## 4   51702 produces          26
+## 5   51703                   26
+## 6   51704 produces          26</code></pre>
+<p>By default <code>get_instrument_table</code> returns a data frame with columns of the administration’s <code>data_id</code>, the item’s <code>num_item_id</code> (numerical <code>item_id</code>), and the corresponding value. To include administration information, you can set the <code>administrations</code> argument to <code>TRUE</code>, or pass the result of <code>get_administration_data</code> as <code>administrations</code> (that way you can prevent the administration data from being loaded multiple times). Similarly, you can set the <code>iteminfo</code> argument to <code>TRUE</code>, or pass it result of <code>get_item_data</code>.</p>
+<p>Loading the data is fast if you need only a handful of items, but the time scales about linearly with the number of items, and can get quite slow if you need many or all of them. So, it’s a good idea to filter down to only the items you need before calling <code>get_instrument_data</code>.</p>
+<p>As an example, let’s say we want to look at the production of animal words on English Words &amp; Sentences over age. First we get the items we want:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">animals &lt;-<span class="st"> </span><span class="kw">get_item_data</span>(<span class="st">&quot;English&quot;</span>, <span class="st">&quot;WS&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(category ==<span class="st"> &quot;animals&quot;</span>)</code></pre></div>
+<p>Then we get the instrument data for those items:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">animal_data &lt;-<span class="st"> </span><span class="kw">get_instrument_data</span>(<span class="dt">instrument_language =</span> <span class="st">&quot;English&quot;</span>,
+                                   <span class="dt">instrument_form =</span> <span class="st">&quot;WS&quot;</span>,
+                                   <span class="dt">items =</span> animals$item_id,
+                                   <span class="dt">administrations =</span> english_ws_admins)</code></pre></div>
+<p>Finally, we calculate how many animals words each child produces and the median number of animals of each age bin:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">animal_summary &lt;-<span class="st"> </span>animal_data %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">produces =</span> value ==<span class="st"> &quot;produces&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(age, data_id) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">num_animals =</span> <span class="kw">sum</span>(produces, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(age) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">median_num_animals =</span> <span class="kw">median</span>(num_animals, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
+  
+<span class="kw">ggplot</span>(animal_summary, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> median_num_animals)) +
+<span class="st">  </span><span class="kw">geom_point</span>()</code></pre></div>
+<p><img src="data:image/png;base64,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" alt /><!-- --></p>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
